@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:poc_ifood_ordermanager/src/data/datasource/database_impl.dart';
 import 'package:poc_ifood_ordermanager/src/data/entity/order_entity.dart';
@@ -9,6 +11,7 @@ class BoardBloc extends ValueNotifier<BoardState> {
   BoardBloc() : super(BoardLoadedState({}));
 
   final _datasource = DataBaseImpl.instance;
+  StreamSubscription? _subscription;
 
   void init() {
     _initStream();
@@ -16,10 +19,16 @@ class BoardBloc extends ValueNotifier<BoardState> {
   }
 
   void _initStream() {
-    _datasource.stream.listen((order) {
+    _subscription = _datasource.stream.listen((order) {
       value.mappedOrders.update(order.id, (value) => order, ifAbsent: () => order);
       emit(BoardLoadedState(value.mappedOrders));
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
   }
 
   void _getOrders() {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:poc_ifood_ordermanager/src/data/datasource/database_impl.dart';
 import 'package:poc_ifood_ordermanager/src/data/entity/order_entity.dart';
@@ -10,11 +12,18 @@ class OrderDetailBloc extends ValueNotifier<OrderDetailState> {
   OrderDetailBloc(this._order) : super(OrderDetailLoaded(_order));
 
   final _datasource = DataBaseImpl.instance;
+  StreamSubscription? _subscription;
 
   void init() {
-    _datasource.streamOf(_order.id).listen((order) {
+    _subscription = _datasource.streamOf(_order.id).listen((order) {
       emit(OrderDetailLoaded(order));
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
   }
 
   void acceptOrder(OrderEntity order) {
