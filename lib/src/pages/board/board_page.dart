@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:poc_ifood_ordermanager/code/firebase.dart';
 import 'package:poc_ifood_ordermanager/src/data/datasource/database_impl.dart';
 import 'package:poc_ifood_ordermanager/src/data/type.dart';
-import 'package:poc_ifood_ordermanager/src/pages/board/bloc/board_bloc.dart';
-import 'package:poc_ifood_ordermanager/src/pages/board/bloc/board_state.dart';
 import 'package:poc_ifood_ordermanager/src/pages/board/board_list_view.dart';
+import 'package:poc_ifood_ordermanager/src/pages/board/controller/board_controller.dart';
+import 'package:poc_ifood_ordermanager/src/pages/board/controller/board_state.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class BoardPage extends StatefulWidget {
 }
 
 class _BoardPageState extends State<BoardPage> {
-  final _bloc = BoardBloc();
+  final _bloc = BoardController();
   OrderType type = OrderType.onGoing;
 
   void _onTapNavBar(int index) {

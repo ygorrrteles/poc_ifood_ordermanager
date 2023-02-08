@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:poc_ifood_ordermanager/src/data/entity/order_entity.dart';
 import 'package:poc_ifood_ordermanager/src/data/type.dart';
-import 'package:poc_ifood_ordermanager/src/pages/order_detail/bloc/order_detail_bloc.dart';
-import 'package:poc_ifood_ordermanager/src/pages/order_detail/bloc/order_detail_state.dart';
+import 'package:poc_ifood_ordermanager/src/pages/order_detail/controller/order_detail_controller.dart';
+import 'package:poc_ifood_ordermanager/src/pages/order_detail/controller/order_detail_state.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final OrderEntity order;
@@ -14,7 +14,7 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  late final _bloc = OrderDetailBloc(widget.order);
+  late final _bloc = OrderDetailController(widget.order);
 
   @override
   void initState() {
