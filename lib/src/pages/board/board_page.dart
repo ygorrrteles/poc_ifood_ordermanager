@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:poc_ifood_ordermanager/code/firebase.dart';
+import 'package:poc_ifood_ordermanager/src/data/datasource/database_impl.dart';
 import 'package:poc_ifood_ordermanager/src/data/type.dart';
 import 'package:poc_ifood_ordermanager/src/pages/board/bloc/board_bloc.dart';
 import 'package:poc_ifood_ordermanager/src/pages/board/bloc/board_state.dart';
@@ -24,6 +26,7 @@ class _BoardPageState extends State<BoardPage> {
   void initState() {
     super.initState();
     _bloc.init();
+    FirebaseConfig.init(DataBaseImpl.instance, Navigator.of(context));
   }
 
   @override

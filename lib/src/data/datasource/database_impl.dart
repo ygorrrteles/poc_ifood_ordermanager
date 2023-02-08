@@ -1,11 +1,14 @@
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:poc_ifood_ordermanager/src/data/datasource/database_interface.dart';
 import 'package:poc_ifood_ordermanager/src/data/entity/order_entity.dart';
 
-class DataBaseImpl implements DataBaseInterface {
+class DataBaseImpl implements DataBase {
   DataBaseImpl._();
 
   static final DataBaseImpl instance = DataBaseImpl._();
+
+  static const BOX_ORDERS = 'BOX_ORDERS';
 
   late Box<OrderEntity> _box;
 
@@ -13,8 +16,7 @@ class DataBaseImpl implements DataBaseInterface {
   Stream<OrderEntity> get stream => _box.watch().map<OrderEntity>((event) => event.value);
 
   @override
-  Stream<OrderEntity> streamOf(String key) =>
-      _box.watch(key: key).where((event) => event.value != null).map((event) => event.value as OrderEntity);
+  Stream<OrderEntity> streamOf(String key) => _box.watch(key: key).where((event) => event.value != null).map((event) => event.value as OrderEntity);
 
   @override
   OrderEntity? get(String id) {
@@ -35,9 +37,10 @@ class DataBaseImpl implements DataBaseInterface {
 
   @override
   Future<void> init() async {
-    Hive.init(null);
-    Hive.registerAdapter<OrderEntity>(_OrderEntityTypeAdapter());
-    _box = await Hive.openBox('myBox');
+    await Hive.initFlutter();
+    Hive.registerAdapter<OrderEntity>(_OrderEntityTypeAdapter(), override: true);
+    _box = await Hive.openBox<OrderEntity>(BOX_ORDERS);
+    _box.compact();
   }
 
   @override
