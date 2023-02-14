@@ -31,7 +31,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         Widget? requestDriver;
 
         if (state.order.type == OrderType.onGoing) {
-          action = ElevatedButton(
+          action = OutlinedButton(
             onPressed: () => _bloc.acceptOrder(state.order),
             child: const Text('Aceitar'),
           );
