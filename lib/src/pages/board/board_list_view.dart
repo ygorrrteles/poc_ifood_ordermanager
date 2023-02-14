@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poc_ifood_ordermanager/src/data/entity/order_entity.dart';
+import 'package:poc_ifood_ordermanager/src/data/type.dart';
 import 'package:poc_ifood_ordermanager/src/pages/order_detail/order_detail_page.dart';
 
 class BoardListView extends StatelessWidget {
@@ -14,6 +15,20 @@ class BoardListView extends StatelessWidget {
       itemCount: orders.length,
       itemBuilder: (context, index) {
         final order = orders[index];
+        Widget? action;
+
+        if (order.type == OrderType.onGoing) {
+          action = ElevatedButton(
+            onPressed: () => onTap?.call(order),
+            child: const Text('Aceitar'),
+          );
+        } else if (order.type == OrderType.delivered) {
+          action = ElevatedButton(
+            onPressed: () => onTap?.call(order),
+            child: const Text('Despachar'),
+          );
+        }
+
         return ListTile(
           onTap: () {
             Navigator.of(context).push(
@@ -24,12 +39,7 @@ class BoardListView extends StatelessWidget {
           },
           title: Text('#${order.shorId} * ${order.customer}'),
           subtitle: Text(order.merchant),
-          trailing: onTap == null
-              ? null
-              : ElevatedButton(
-                  onPressed: () => onTap?.call(order),
-                  child: Text('Aceitar'),
-                ),
+          trailing: action,
         );
       },
     );

@@ -4,12 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:poc_ifood_ordermanager/src/data/datasource/database_impl.dart';
 import 'package:poc_ifood_ordermanager/src/data/datasource/database_interface.dart';
 import 'package:poc_ifood_ordermanager/src/data/entity/order_entity.dart';
 import 'package:poc_ifood_ordermanager/src/pages/order_detail/order_detail_page.dart';
 
 class FirebaseConfig {
-  static Future<void> init(DataBase dataBase, NavigatorState navigator) async {
+  static Future<void> init(NavigatorState navigator) async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
 
@@ -30,7 +31,7 @@ class FirebaseConfig {
       onDidReceiveNotificationResponse: (details) {
         if (details.payload == null) return;
         final data = jsonDecode(details.payload!);
-        final order = dataBase.get(data['id']);
+        final order = DataBaseImpl.instance.get(data['id']);
         if (order == null) return;
         navigator.push(
           MaterialPageRoute(
@@ -51,17 +52,17 @@ class FirebaseConfig {
     );
     final token = await FirebaseMessaging.instance.getToken();
     print(token);
-    _initListen(flutterLocalNotificationsPlugin, channel, dataBase);
+    _initListen(flutterLocalNotificationsPlugin, channel);
     _onTapMessage();
   }
 
-  static _initListen(FlutterLocalNotificationsPlugin flutterNotification, AndroidNotificationChannel channel, DataBase dataBase) {
+  static _initListen(FlutterLocalNotificationsPlugin flutterNotification, AndroidNotificationChannel channel) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification == null || android == null) return;
       if (message.data['pushType'] == 'new_order') {
-        dataBase.put(OrderEntity.fromMap(message.data));
+        DataBaseImpl.instance.put(OrderEntity.fromMap(message.data));
       }
 
       flutterNotification.show(

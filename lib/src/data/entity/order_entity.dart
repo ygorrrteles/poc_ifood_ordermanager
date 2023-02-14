@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:poc_ifood_ordermanager/src/data/entity/metadata_driver.dart';
 import 'package:poc_ifood_ordermanager/src/data/type.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,6 +12,7 @@ class OrderEntity {
   final OrderType type;
   final DateTime createdAt;
   final DateTime updateAt;
+  final MetadataDriver? metadataDriver;
 
   const OrderEntity({
     required this.id,
@@ -20,6 +22,7 @@ class OrderEntity {
     required this.type,
     required this.createdAt,
     required this.updateAt,
+    this.metadataDriver,
   });
 
   Map<String, dynamic> get toMap => {
@@ -30,6 +33,7 @@ class OrderEntity {
         'type': type.name,
         'createdAt': createdAt.toIso8601String(),
         'updateAt': updateAt.toIso8601String(),
+        'metadataDriver': metadataDriver?.toMap,
       };
 
   factory OrderEntity.fromMock() {
@@ -69,6 +73,7 @@ class OrderEntity {
     OrderType? type,
     DateTime? createdAt,
     DateTime? updateAt,
+    MetadataDriver? metadataDriver,
   }) {
     return OrderEntity(
       id: id ?? this.id,
@@ -78,6 +83,7 @@ class OrderEntity {
       type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
       updateAt: updateAt ?? this.updateAt,
+      metadataDriver: metadataDriver ?? this.metadataDriver,
     );
   }
 

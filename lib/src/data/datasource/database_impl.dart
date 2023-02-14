@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:poc_ifood_ordermanager/src/data/datasource/database_interface.dart';
@@ -16,7 +18,8 @@ class DataBaseImpl implements DataBase {
   Stream<OrderEntity> get stream => _box.watch().map<OrderEntity>((event) => event.value);
 
   @override
-  Stream<OrderEntity> streamOf(String key) => _box.watch(key: key).where((event) => event.value != null).map((event) => event.value as OrderEntity);
+  Stream<OrderEntity> streamOf(String key) =>
+      _box.watch(key: key).where((event) => event.value != null).map((event) => event.value as OrderEntity);
 
   @override
   OrderEntity? get(String id) {
@@ -45,7 +48,13 @@ class DataBaseImpl implements DataBase {
 
   @override
   void put(OrderEntity order) {
+    log('Atualizando pedido ${order.shorId}');
     _box.put(order.id, order.copyWith(updateAt: DateTime.now()));
+  }
+
+  @override
+  void clear() {
+    _box.clear();
   }
 }
 

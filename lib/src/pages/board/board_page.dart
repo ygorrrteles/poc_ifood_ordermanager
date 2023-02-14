@@ -26,7 +26,7 @@ class _BoardPageState extends State<BoardPage> {
   void initState() {
     super.initState();
     _bloc.init();
-    FirebaseConfig.init(DataBaseImpl.instance, Navigator.of(context));
+    FirebaseConfig.init(Navigator.of(context));
   }
 
   @override
@@ -58,7 +58,10 @@ class _BoardPageState extends State<BoardPage> {
         }
 
         return Scaffold(
-          appBar: AppBar(title: Text('Gestor de Pedidos * total: ${state.mappedOrders.values.length}')),
+          appBar: AppBar(
+            title: Text('Gestor de Pedidos * total: ${state.mappedOrders.values.length}'),
+            actions: [IconButton(onPressed: _bloc.clear, icon: const Icon(Icons.delete_forever))],
+          ),
           floatingActionButton: fab,
           bottomNavigationBar: BottomNavigationBar(
             onTap: _onTapNavBar,
